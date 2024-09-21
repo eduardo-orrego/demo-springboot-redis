@@ -1,0 +1,14 @@
+spring:
+    application:
+        name: redis-cache
+    cache:
+        type: redis
+        #redis:
+            #time-to-live: 30000 /# Configurar TTL global de 30 segundos
+    redis:
+        host: localhost
+        port: 6379
+        timeout: 60000
+
+server:
+    port: 8087
