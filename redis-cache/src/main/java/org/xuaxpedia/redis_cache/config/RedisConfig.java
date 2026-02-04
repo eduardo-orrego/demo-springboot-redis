@@ -14,13 +14,24 @@ import org.springframework.data.redis.serializer.RedisSerializationContext.Seria
 public class RedisConfig {
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-        // Configurar TTL global de 60 segundos
+        //Set global TTL to 60 seconds
         RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofSeconds(60))  // TTL de 60 segundos para todas las entradas
+            .entryTtl(Duration.ofSeconds(60))
             .serializeValuesWith(SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+
+        //A cache-specific TTL is configured that overrides the global cache policy.
+        RedisCacheConfiguration usersConfig =
+          RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(5))
+            .serializeValuesWith(
+              SerializationPair.fromSerializer(
+                new GenericJackson2JsonRedisSerializer()
+              )
+            );
 
         return RedisCacheManager.builder(redisConnectionFactory)
             .cacheDefaults(cacheConfig)
+            .withCacheConfiguration("products", usersConfig)
             .build();
     }
 

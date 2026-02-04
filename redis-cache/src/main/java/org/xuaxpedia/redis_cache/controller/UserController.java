@@ -15,9 +15,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Endpoint para obtener un usuario por su ID
+    // Endpoint to retrieve a user by ID. Caching applies a default (global) TTL policy.
     @GetMapping("/users/{userId}")
     public User getUser(@PathVariable Long userId) {
         return userService.getUserById(userId);
+    }
+
+    // Endpoint to retrieve a product by ID. Uses a cache-specific TTL overriding the global cache policy.
+    @GetMapping("/products/{productId}")
+    public User getProduct(@PathVariable Long productId) {
+        return userService.getProductId(productId);
     }
 }
